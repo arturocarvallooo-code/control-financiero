@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Control Financiero Pro - Local</title>
+    <title>Control Financiero Pro - Sincronizado</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans min-h-screen">
 
@@ -25,6 +26,7 @@
                     Ingresar al Tablero
                 </button>
             </div>
+            <div id="estado-conexion-inicial" class="text-[10px] text-gray-400 font-medium">Revisando credenciales...</div>
         </div>
     </div>
 
@@ -32,7 +34,10 @@
         
         <div class="bg-white rounded-2xl shadow-sm p-6 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-                <h1 class="text-2xl font-black text-indigo-600">📊 Control Financiero Pro</h1>
+                <div class="flex items-center gap-2">
+                    <h1 class="text-2xl font-black text-indigo-600">📊 Control Financiero Pro</h1>
+                    <span id="badge-cloud" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-gray-100 text-gray-500">Comprobando nube...</span>
+                </div>
                 <p class="text-sm text-gray-500">Alcancías bimonetarias con auxilio de fondos y compensación</p>
             </div>
             
@@ -251,7 +256,7 @@
 
         <div class="bg-white rounded-xl shadow-sm p-5 border border-gray-200">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-base font-bold text-gray-700">📋 Historial Reciente de Movimientos (Local)</h3>
+                <h3 class="text-base font-bold text-gray-700">📋 Historial Reciente de Movimientos (Nube Activa)</h3>
                 <button onclick="limpiarTodo()" class="text-xs text-red-500 hover:underline cursor-pointer">Limpiar todos los datos</button>
             </div>
             <div class="overflow-x-auto">
@@ -274,6 +279,16 @@
     </div>
 
     <script>
+        // ==========================================
+        //  ⚠️ CONFIGURA TUS CREDENCIALES AQUÍ ABAJO
+        // ==========================================
+        const SUPABASE_URL = "DEJA_ESTO_COMO_ESTA_O_PON_TU_URL";
+        const SUPABASE_ANON_KEY = "DEJA_ESTO_COMO_ESTA_O_PON_TU_KEY";
+        // ==========================================
+
+        let supabaseClient = null;
+        let modoNubeActivo = false;
+
         let cuenta = {
             alcancias: [
                 { id: "necesidades", nombre: "Necesidades", porcentaje: 55, icono: "🛒", color: "bg-blue-600", saldoBs: 0, saldoUSD: 0 },
@@ -285,6 +300,17 @@
             ],
             movimientos: []
         };
+
+        // Probar credenciales antes de congelar nada
+        try {
+            if(window.supabase && SUPABASE_URL && SUPABASE_URL !== "DEJA_ESTO_COMO_ESTA_O_PON_TU_URL" && SUPABASE_ANON_KEY.length > 30) {
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                modoNubeActivo = true;
+            }
+        } catch (e) {
+            console.error("Error inicializando Supabase, usando modo Local de respaldo:", e);
+            modoNubeActivo = false;
+        }
 
         function verificarClave() {
             const pin = document.getElementById('claveInput').value;
@@ -298,26 +324,82 @@
             }
         }
 
-        function inicializarApp() {
+        async function inicializarApp() {
             const hoy = new Date().toISOString().split('T')[0];
             document.getElementById('ingresoFecha').value = hoy;
             document.getElementById('gastoFecha').value = hoy;
             document.getElementById('cambioFecha').value = hoy;
 
-            if(localStorage.getItem('sistemaAlcanciasCompensadasLocal')) {
-                cuenta = JSON.parse(localStorage.getItem('sistemaAlcanciasCompensadasLocal'));
-            }
+            // Cargar tasas locales de base
             if(localStorage.getItem('sistemaAlcanciasTasasLocal')) {
                 const tasas = JSON.parse(localStorage.getItem('sistemaAlcanciasTasasLocal'));
                 document.getElementById('tasaBCV').value = tasas.bcv;
                 document.getElementById('tasaBinance').value = tasas.binance;
                 document.getElementById('tasaPersonal').value = tasas.personal;
             }
+
+            const badge = document.getElementById('badge-cloud');
+
+            if (modoNubeActivo && supabaseClient) {
+                badge.innerText = "⏳ Sincronizando Nube...";
+                badge.className = "px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700";
+                
+                try {
+                    // Intentar descargar datos desde Supabase con un límite de tiempo
+                    const { data, error } = await supabaseClient
+                        .from('registros_financieros')
+                        .select('datos')
+                        .eq('id', 1)
+                        .maybeSingle();
+
+                    if (error) throw error;
+
+                    if (data && data.datos) {
+                        cuenta = data.datos;
+                        badge.innerText = "☁️ Nube Sincronizada";
+                        badge.className = "px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-700";
+                    } else {
+                        // Si la tabla está vacía, subir el esquema inicial
+                        await supabaseClient.from('registros_financieros').insert([{ id: 1, datos: cuenta }]);
+                        badge.innerText = "☁️ Nube Inicializada";
+                        badge.className = "px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-700";
+                    }
+                } catch (err) {
+                    console.warn("Fallo de red en la nube. Cambiando a Respaldo Local integrado:", err);
+                    badge.innerText = "⚠️ Modo Local (Nube desconectada)";
+                    badge.className = "px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-700";
+                    modoNubeActivo = false;
+                    cargarLocalRespaldo();
+                }
+            } else {
+                badge.innerText = "💾 Modo Local Activo";
+                badge.className = "px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-700";
+                cargarLocalRespaldo();
+            }
+
             actualizarInterfaz();
         }
 
-        function guardarDatos() {
+        function cargarLocalRespaldo() {
+            if(localStorage.getItem('sistemaAlcanciasCompensadasLocal')) {
+                cuenta = JSON.parse(localStorage.getItem('sistemaAlcanciasCompensadasLocal'));
+            }
+        }
+
+        async function guardarDatos() {
+            // Guardar localmente siempre por seguridad
             localStorage.setItem('sistemaAlcanciasCompensadasLocal', JSON.stringify(cuenta));
+
+            if (modoNubeActivo && supabaseClient) {
+                try {
+                    await supabaseClient
+                        .from('registros_financieros')
+                        .update({ datos: cuenta })
+                        .eq('id', 1);
+                } catch (e) {
+                    console.error("No se pudo respaldar el cambio en la nube:", e);
+                }
+            }
         }
 
         function guardarTasas() {
@@ -682,7 +764,7 @@
         }
 
         function limpiarTodo() {
-            if(confirm("¿Reiniciar todo?")) {
+            if(confirm("¿Reiniciar todos los datos?")) {
                 localStorage.removeItem('sistemaAlcanciasCompensadasLocal');
                 location.reload();
             }
