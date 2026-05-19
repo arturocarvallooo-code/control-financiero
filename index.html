@@ -1,29 +1,26 @@
+HTML
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Control Financiero Pro - Cloud</title>
-    <!-- Tailwind CSS v4 -->
+    <title>Control Financiero Pro - Local</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- Cliente de Supabase Oficial -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans min-h-screen">
 
-    <!-- 1. PANTALLA DE ACCESO POR CLAVE -->
     <div id="pantalla-candado" class="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center z-50 p-4">
         <div class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center space-y-6">
             <div class="space-y-2">
                 <span class="text-5xl block">🛡️</span>
                 <h2 class="text-xl font-black text-gray-800">Sistema Resguardado</h2>
-                <p class="text-xs text-gray-500">Ingresa la clave de acceso de 4 dígitos para sincronizar las cuentas</p>
+                <p class="text-xs text-gray-500">Ingresa la clave de acceso de 4 dígitos</p>
             </div>
             
             <div class="space-y-3">
                 <input type="password" id="claveInput" maxlength="4" placeholder="••••" 
                        class="w-full text-center text-2xl font-bold tracking-widest p-3 border-2 border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:border-indigo-500 transition">
-                <p id="error-clave" class="text-xs font-semibold text-red-500 hidden">❌ Clave incorrecta. Intenta de nuevo.</p>
+                <p id="error-clave" class="text-xs font-semibold text-red-500 hidden">❌ Clave incorrecta.</p>
                 <button onclick="verificarClave()" 
                         class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold p-3 rounded-xl cursor-pointer transition shadow-sm">
                     Ingresar al Tablero
@@ -32,14 +29,12 @@
         </div>
     </div>
 
-    <!-- 2. CONTENEDOR PRINCIPAL DE LA APLICACIÓN -->
     <div id="app-contenido" class="hidden p-4 md:p-6 max-w-6xl mx-auto space-y-6">
         
-        <!-- ENCABEZADO Y TASAS -->
         <div class="bg-white rounded-2xl shadow-sm p-6 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
                 <h1 class="text-2xl font-black text-indigo-600">📊 Control Financiero Pro</h1>
-                <p class="text-sm text-gray-500">Alcancías bimonetarias con auxilio de fondos y sincronización en la Nube</p>
+                <p class="text-sm text-gray-500">Alcancías bimonetarias con auxilio de fondos y compensación</p>
             </div>
             
             <div class="flex items-center gap-3">
@@ -50,21 +45,20 @@
                 <div class="flex flex-wrap gap-2 bg-gray-50 p-2 rounded-xl border border-gray-200">
                     <div>
                         <label class="block text-[9px] font-bold text-gray-500 uppercase">BCV</label>
-                        <input type="number" id="tasaBCV" value="45.50" step="0.01" onchange="guardarTasasCloud()" class="w-20 p-1 text-xs border border-gray-300 rounded bg-white font-semibold">
+                        <input type="number" id="tasaBCV" value="45.50" step="0.01" onchange="guardarTasas()" class="w-20 p-1 text-xs border border-gray-300 rounded bg-white font-semibold">
                     </div>
                     <div>
                         <label class="block text-[9px] font-bold text-gray-500 uppercase">Binance</label>
-                        <input type="number" id="tasaBinance" value="52.30" step="0.01" onchange="guardarTasasCloud()" class="w-20 p-1 text-xs border border-gray-300 rounded bg-white font-semibold">
+                        <input type="number" id="tasaBinance" value="52.30" step="0.01" onchange="guardarTasas()" class="w-20 p-1 text-xs border border-gray-300 rounded bg-white font-semibold">
                     </div>
                     <div>
                         <label class="block text-[9px] font-bold text-gray-500 uppercase">Personal</label>
-                        <input type="number" id="tasaPersonal" value="53.00" step="0.01" onchange="guardarTasasCloud()" class="w-20 p-1 text-xs border border-gray-300 rounded bg-white font-semibold">
+                        <input type="number" id="tasaPersonal" value="53.00" step="0.01" onchange="guardarTasas()" class="w-20 p-1 text-xs border border-gray-300 rounded bg-white font-semibold">
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- INDICADORES GLOBALES -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between">
                 <div>
@@ -82,7 +76,6 @@
             </div>
         </div>
 
-        <!-- PANEL DE CONFIGURACIÓN -->
         <div id="seccion-ajustes" class="hidden bg-white rounded-xl shadow-md p-5 border-2 border-indigo-100 transition-all duration-300 space-y-6">
             <div class="flex justify-between items-center border-b border-gray-100 pb-2">
                 <h3 class="text-base font-black text-indigo-700 flex items-center gap-2">⚙️ Panel de Configuración y Apertura</h3>
@@ -133,7 +126,7 @@
 
             <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
                 <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">🏦 Inicializar Fondos Manuales / Saldos de Apertura</h4>
-                <p class="text-xs text-gray-400 mb-3">Establece el dinero físico y real con el que abres tus cuentas actuales:</p>
+                <p class="text-xs text-gray-400 mb-3">Establece el dinero físico con el que abres tus cuentas:</p>
                 <div id="contenedor-saldos-iniciales" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3"></div>
                 <button onclick="establecerSaldosIniciales()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-lg mt-3 cursor-pointer transition">
                     💾 Establecer Saldos de Apertura
@@ -141,18 +134,14 @@
             </div>
         </div>
 
-        <!-- ALERTA BALANCES -->
         <div id="alerta-porcentaje" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-xl shadow-sm" role="alert">
             <p class="font-bold">⚠️ Distribución desequilibrada</p>
             <p class="text-sm">La suma de los porcentajes debe ser exactamente 100%. Actualmente es: <span id="suma-porcentaje-actual" class="font-bold">0%</span>.</p>
         </div>
 
-        <!-- GRILLA DE ALCANCÍAS -->
         <div id="contenedor-alcancias" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3"></div>
 
-        <!-- SECCIÓN DE OPERACIONES -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- INGRESO BS -->
             <div class="bg-white rounded-xl shadow-sm p-5 border border-gray-200">
                 <h3 class="text-base font-bold text-gray-700 mb-3 flex items-center gap-1">📥 Registrar Ingreso (En Bolívares)</h3>
                 <div class="space-y-3">
@@ -176,7 +165,6 @@
                 </div>
             </div>
 
-            <!-- CAMBIO DIVISAS -->
             <div class="bg-white rounded-xl shadow-sm p-5 border border-emerald-100 bg-emerald-50/10">
                 <h3 class="text-base font-bold text-emerald-800 mb-3 flex items-center gap-1">🔄 Registrar Cambio a Dólares ($)</h3>
                 <div class="space-y-3">
@@ -204,7 +192,6 @@
                 </div>
             </div>
 
-            <!-- REGISTRO DE GASTOS -->
             <div class="bg-white rounded-xl shadow-sm p-5 border border-gray-200">
                 <h3 class="text-base font-bold text-gray-700 mb-3 flex items-center gap-1">💸 Registrar Gasto</h3>
                 <div class="space-y-3">
@@ -236,18 +223,17 @@
                         </div>
                     </div>
 
-                    <!-- PANEL DE COMPENSACIÓN AUTOMÁTICA -->
                     <div id="panel-compensacion" class="hidden p-3 bg-amber-50 border-2 border-amber-300 rounded-xl space-y-2">
                         <p class="text-xs font-bold text-amber-800 flex items-center gap-1">⚠️ Saldo Insuficiente. ¿Cómo deseas compensar?</p>
-                        <p class="text-[11px] text-gray-600">Se usará todo tu saldo disponible en la cuenta de origen y el resto se tomará prestado de otra cuenta a cambio de tus dólares.</p>
+                        <p class="text-[11px] text-gray-600">Se usará todo tu saldo disponible y el resto se tomará prestado de otra cuenta.</p>
                         
                         <div class="grid grid-cols-2 gap-2">
                             <div>
-                                <label class="text-[10px] font-bold text-amber-900 block">¿Quién presta el dinero?</label>
+                                <label class="text-[10px] font-bold text-amber-900 block">¿Quién presta?</label>
                                 <select id="compensacionCuentaPrestamista" class="w-full p-1.5 border border-amber-300 rounded bg-white text-xs"></select>
                             </div>
                             <div>
-                                <label class="text-[10px] font-bold text-amber-900 block">Tasa de Conversión ($)</label>
+                                <label class="text-[10px] font-bold text-amber-900 block">Tasa ($)</label>
                                 <select id="compensacionTasaTipo" class="w-full p-1.5 border border-amber-300 rounded bg-white text-xs">
                                     <option value="BCV">BCV</option>
                                     <option value="Binance">Binance</option>
@@ -264,10 +250,9 @@
             </div>
         </div>
 
-        <!-- TABLA DE MOVIMIENTOS -->
         <div class="bg-white rounded-xl shadow-sm p-5 border border-gray-200">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-base font-bold text-gray-700">📋 Historial Reciente de Movimientos (Nube)</h3>
+                <h3 class="text-base font-bold text-gray-700">📋 Historial Reciente de Movimientos (Local)</h3>
                 <button onclick="limpiarTodo()" class="text-xs text-red-500 hover:underline cursor-pointer">Limpiar todos los datos</button>
             </div>
             <div class="overflow-x-auto">
@@ -289,17 +274,7 @@
         </div>
     </div>
 
-    <!-- 3. LÓGICA DE PROGRAMACIÓN CON CONEXIÓN SUPABASE -->
     <script>
-        // ==========================================
-        // REEMPLAZA ESTOS DATOS CON TU PROPIO SUPABASE
-        // ==========================================
-        const SUPABASE_URL = "sb_publishable_4LNIME8pgjsdNoGDcS_V1A_Msx6W2NB";
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpndHJrYmtscHFlYWNhdmJuY2RjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMTQyNzYsImV4cCI6MjA5NDc5MDI3Nn0.ddd6mx_W6sykL1gBiLoCF7gcwK0GVocsXpA6ync3k1Q";
-
-        const supabase =  window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
-
-        // Estado inicial estructurado por defecto
         let cuenta = {
             alcancias: [
                 { id: "necesidades", nombre: "Necesidades", porcentaje: 55, icono: "🛒", color: "bg-blue-600", saldoBs: 0, saldoUSD: 0 },
@@ -312,7 +287,6 @@
             movimientos: []
         };
 
-        // Verificación de PIN de Acceso
         function verificarClave() {
             const pin = document.getElementById('claveInput').value;
             if (pin === "8080") {
@@ -320,83 +294,43 @@
                 document.getElementById('app-contenido').classList.remove('hidden');
                 inicializarApp();
             } else {
-                const err = document.getElementById('error-clave');
-                err.classList.remove('hidden');
+                document.getElementById('error-clave').classList.remove('hidden');
                 document.getElementById('claveInput').value = "";
             }
         }
 
-        // Ejecución al pasar la clave
-        async function inicializarApp() {
+        function inicializarApp() {
             const hoy = new Date().toISOString().split('T')[0];
             document.getElementById('ingresoFecha').value = hoy;
             document.getElementById('gastoFecha').value = hoy;
             document.getElementById('cambioFecha').value = hoy;
 
-            if (supabase) {
-                await descargarDatosCloud();
-            } else {
-                // Fallback a LocalStorage si no se ha configurado Supabase aún
-                if(localStorage.getItem('sistemaAlcanciasCompensadas')) {
-                    cuenta = JSON.parse(localStorage.getItem('sistemaAlcanciasCompensadas'));
-                }
-                if(localStorage.getItem('sistemaAlcanciasTasas')) {
-                    const tasas = JSON.parse(localStorage.getItem('sistemaAlcanciasTasas'));
-                    document.getElementById('tasaBCV').value = tasas.bcv;
-                    document.getElementById('tasaBinance').value = tasas.binance;
-                    document.getElementById('tasaPersonal').value = tasas.personal;
-                }
-                actualizarInterfaz();
+            if(localStorage.getItem('sistemaAlcanciasCompensadasLocal')) {
+                cuenta = JSON.parse(localStorage.getItem('sistemaAlcanciasCompensadasLocal'));
             }
+            if(localStorage.getItem('sistemaAlcanciasTasasLocal')) {
+                const tasas = JSON.parse(localStorage.getItem('sistemaAlcanciasTasasLocal'));
+                document.getElementById('tasaBCV').value = tasas.bcv;
+                document.getElementById('tasaBinance').value = tasas.binance;
+                document.getElementById('tasaPersonal').value = tasas.personal;
+            }
+            actualizarInterfaz();
         }
 
-        // SINCRONIZACIÓN DE BAJADA (LEER DE LA NUBE)
-        async function descargarDatosCloud() {
-            try {
-                // Leer estado financiero (ID 1 es la fila única de trabajo)
-                let { data: estado, error } = await supabase.from('control_financiero').select('*').eq('id', 1).single();
-                
-                if (estado) {
-                    cuenta = estado.datos_cuenta;
-                    document.getElementById('tasaBCV').value = estado.tasa_bcv;
-                    document.getElementById('tasaBinance').value = estado.tasa_binance;
-                    document.getElementById('tasaPersonal').value = estado.tasa_personal;
-                } else {
-                    // Si la tabla está vacía, creamos el registro inicial en la nube
-                    await subirDatosCloud();
-                }
-                actualizarInterfaz();
-            } catch (e) {
-                console.error("Error descargando datos de Supabase:", e);
-            }
+        function guardarDatos() {
+            localStorage.setItem('sistemaAlcanciasCompensadasLocal', JSON.stringify(cuenta));
         }
 
-        // SINCRONIZACIÓN DE SUBIDA (GUARDAR EN LA NUBE)
-        async function subirDatosCloud() {
-            if (!supabase) {
-                localStorage.setItem('sistemaAlcanciasCompensadas', JSON.stringify(cuenta));
-                return;
-            }
-            const tBCV = parseFloat(document.getElementById('tasaBCV').value) || 1;
-            const tBinance = parseFloat(document.getElementById('tasaBinance').value) || 1;
-            const tPersonal = parseFloat(document.getElementById('tasaPersonal').value) || 1;
-
-            const { error } = await supabase.from('control_financiero').upsert({
-                id: 1,
-                datos_cuenta: cuenta,
-                tasa_bcv: tBCV,
-                tasa_binance: tBinance,
-                tasa_personal: tPersonal
-            });
-            if(error) console.error("Error al subir cambios:", error);
-        }
-
-        async function guardarTasasCloud() {
-            await subirDatosCloud();
+        function guardarTasas() {
+            const tasas = {
+                bcv: parseFloat(document.getElementById('tasaBCV').value) || 1,
+                binance: parseFloat(document.getElementById('tasaBinance').value) || 1,
+                personal: parseFloat(document.getElementById('tasaPersonal').value) || 1
+            };
+            localStorage.setItem('sistemaAlcanciasTasasLocal', JSON.stringify(tasas));
             evaluarNecesidadCompensacion();
         }
 
-        // --- FUNCIONES INTERNAS REPLICADAS CON INTERRUPTOR CLOUD ---
         function fmt(num, symbol = "") {
             if(isNaN(num)) return "0,00";
             let formatted = num.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -416,11 +350,11 @@
 
             if(suma !== 100) {
                 alerta.classList.remove('hidden');
-                btnIngreso.disabled = true;
+                if(btnIngreso) btnIngreso.disabled = true;
                 return false;
             } else {
                 alerta.classList.add('hidden');
-                btnIngreso.disabled = false;
+                if(btnIngreso) btnIngreso.disabled = false;
                 return true;
             }
         }
@@ -441,7 +375,7 @@
             const panel = document.getElementById('panel-compensacion');
 
             if(isNaN(montoInput) || montoInput <= 0 || !alcanciaId) {
-                panel.classList.add('hidden');
+                if(panel) panel.classList.add('hidden');
                 return;
             }
 
@@ -449,28 +383,30 @@
             const saldoDisponible = (moneda === "Bs") ? alc.saldoBs : alc.saldoUSD;
 
             if (saldoDisponible < montoInput) {
-                panel.classList.remove('hidden');
+                if(panel) panel.classList.remove('hidden');
                 const selectPrestamista = document.getElementById('compensacionCuentaPrestamista');
-                selectPrestamista.innerHTML = '';
-                cuenta.alcancias.forEach(a => {
-                    if(a.id !== alcanciaId) {
-                        selectPrestamista.innerHTML += `<option value="${a.id}">${a.icono} ${a.nombre} (Bs: ${fmt(a.saldoBs)} | $: ${fmt(a.saldoUSD)})</option>`;
-                    }
-                });
+                if(selectPrestamista) {
+                    selectPrestamista.innerHTML = '';
+                    cuenta.alcancias.forEach(a => {
+                        if(a.id !== alcanciaId) {
+                            selectPrestamista.innerHTML += `<option value="${a.id}">${a.icono} ${a.nombre} (Bs: ${fmt(a.saldoBs)} | $: ${fmt(a.saldoUSD)})</option>`;
+                        }
+                    });
+                }
             } else {
-                panel.classList.add('hidden');
+                if(panel) panel.classList.add('hidden');
             }
         }
 
-        async function modificarAlcancia(index, campo, valor) {
+        function modificarAlcancia(index, campo, valor) {
             if(campo === 'porcentaje') cuenta.alcancias[index].porcentaje = parseFloat(valor) || 0;
             else if (campo === 'nombre') cuenta.alcancias[index].nombre = valor.trim() || "Sin nombre";
+            guardarDatos();
             verificarPorcentajes();
-            await subirDatosCloud();
             actualizarInterfaz();
         }
 
-        async function crearAlcancia() {
+        function crearAlcancia() {
             const nombre = document.getElementById('nuevaId').value.trim();
             const porcentaje = parseFloat(document.getElementById('nuevoPorcentaje').value) || 0;
             const color = document.getElementById('nuevoColor').value;
@@ -486,19 +422,19 @@
 
             document.getElementById('nuevaId').value = '';
             document.getElementById('nuevoPorcentaje').value = '';
-            await subirDatosCloud();
+            guardarDatos();
             actualizarInterfaz();
         }
 
-        async function eliminarAlcancia(index) {
+        function eliminarAlcancia(index) {
             if(confirm(`¿Seguro que deseas eliminar la alcancía "${cuenta.alcancias[index].nombre}"?`)) {
                 cuenta.alcancias.splice(index, 1);
-                await subirDatosCloud();
+                guardarDatos();
                 actualizarInterfaz();
             }
         }
 
-        async function establecerSaldosIniciales() {
+        function establecerSaldosIniciales() {
             const hoy = document.getElementById('gastoFecha').value || new Date().toISOString().split('T')[0];
             cuenta.alcancias.forEach(alc => {
                 const inputBs = document.getElementById(`init-bs-${alc.id}`);
@@ -511,12 +447,12 @@
                 fecha: hoy, fuente: "Ajuste manual de saldos iniciales", tipo: "Ajuste",
                 txtBs: "Modificado", txtUSD: "Modificado", destino: "Múltiple"
             });
-            await subirDatosCloud();
+            guardarDatos();
             actualizarInterfaz();
-            alert("Saldos iniciales fijados y sincronizados.");
+            alert("Saldos iniciales guardados con éxito.");
         }
 
-        async function agregarIngreso() {
+        function agregarIngreso() {
             if(!verificarPorcentajes()) return;
 
             const fuente = document.getElementById('ingresoFuente').value.trim() || "Ingreso General";
@@ -539,11 +475,11 @@
 
             document.getElementById('ingresoFuente').value = '';
             document.getElementById('ingresoMonto').value = '';
-            await subirDatosCloud();
+            guardarDatos();
             actualizarInterfaz();
         }
 
-        async function comprarDolares() {
+        function comprarDolares() {
             const montoBsACambiar = parseFloat(document.getElementById('cambioMontoBs').value);
             const tipoTasa = document.getElementById('cambioTasaTipo').value;
             const fecha = document.getElementById('cambioFecha').value || new Date().toISOString().split('T')[0];
@@ -562,22 +498,20 @@
                 alc.saldoUSD += fraccionUSD;
             });
 
-            alert(`¡Éxito! Se movieron ${fmt(montoBsACambiar)} Bs. a su equivalente de $${fmt(usdCompradosTotales)} USD distribuidos.`);
-
             cuenta.movimientos.unshift({
                 fecha: fecha, 
-                fuente: `Compra Divisas (${tipoTasa} x ${fmt(tasa)}). Cambiaste ${fmt(montoBsACambiar)} Bs por el equivalente de $${fmt(usdCompradosTotales)}`, 
+                fuente: `Compra Divisas (${tipoTasa} x ${fmt(tasa)})`, 
                 tipo: "Cambio $",
                 txtBs: `-${fmt(montoBsACambiar)} Bs`, txtUSD: `+$${fmt(usdCompradosTotales)}`,
-                montoBs: -montoBsACambiar, montoUSD: usdCompradosTotales, destino: "Todas las alcancías"
+                montoBs: -montoBsACambiar, montoUSD: usdCompradosTotales, destino: "Todas"
             });
 
             document.getElementById('cambioMontoBs').value = '';
-            await subirDatosCloud();
+            guardarDatos();
             actualizarInterfaz();
         }
 
-        async function agregarGasto() {
+        function agregarGasto() {
             const desc = document.getElementById('gastoDesc').value.trim() || "Gasto sin concepto";
             const montoInput = parseFloat(document.getElementById('gastoMonto').value);
             const moneda = document.getElementById('gastoMoneda').value;
@@ -613,7 +547,7 @@
                 const idxPrestamista = cuenta.alcancias.findIndex(a => a.id === prestamistaId);
 
                 if (idxPrestamista === -1) {
-                    alert("Selecciona una cuenta válida para financiar la compensación."); return;
+                    alert("Selecciona una cuenta prestamista válida."); return;
                 }
 
                 const alcPrestamista = cuenta.alcancias[idxPrestamista];
@@ -622,120 +556,46 @@
 
                 if (moneda === "Bs") {
                     alcOrigen.saldoBs = 0; 
-                    if(alcPrestamista.saldoBs < faltante) {
-                        if(!confirm(`La cuenta prestamista (${alcPrestamista.nombre}) tampoco tiene suficientes Bs. ¿Forzar saldo negativo?`)) return;
-                    }
                     alcPrestamista.saldoBs -= faltante;
-
                     const equivalenteUSD = faltante / tasa;
-                    if(alcOrigen.saldoUSD < equivalenteUSD) {
-                        if(!confirm(`⚠️ Tu cuenta ${alcOrigen.nombre} no tiene suficientes dólares para respaldar el préstamo. ¿Dejar saldo negativo?`)) return;
-                    }
                     alcOrigen.saldoUSD -= equivalenteUSD;
                     alcPrestamista.saldoUSD += equivalenteUSD;
 
-                    alert(`¡Éxito! Se movieron ${fmt(faltante)} Bs. a su equivalente de $${fmt(equivalenteUSD)} USD para compensar en "${alcOrigen.nombre}".`);
-
                     cuenta.movimientos.unshift({
                         fecha: fecha,
-                        fuente: `${desc} [Compensación Tasa ${tipoTasa} x ${fmt(tasa)}: El prestamista tomó ${fmt(faltante)} Bs a cambio de $${fmt(equivalenteUSD)}]`,
-                        tipo: "Gasto",
-                        txtBs: `-${fmt(montoInput)} Bs`,
-                        txtUSD: `⇄ $ En Cuentas`,
-                        operacion: "compensado",
-                        monedaGasto: "Bs",
-                        montoBsOrigen: -saldoDisponible,
-                        montoBsPrestamista: -faltante,
-                        montoUSDCompensacion: equivalenteUSD,
-                        alcanciaKey: alcanciaId,
-                        prestamistaKey: prestamistaId,
-                        destino: `${alcOrigen.nombre.toUpperCase()}`
+                        fuente: `${desc} [Compensado con ${alcPrestamista.nombre}]`,
+                        tipo: "Gasto", txtBs: `-${fmt(montoInput)} Bs`, txtUSD: `⇄ $ En Cuentas`,
+                        operacion: "compensado", monedaGasto: "Bs",
+                        montoBsOrigen: -saldoDisponible, montoBsPrestamista: -faltante, montoUSDCompensacion: equivalenteUSD,
+                        alcanciaKey: alcanciaId, prestamistaKey: prestamistaId, destino: `${alcOrigen.nombre.toUpperCase()}`
                     });
-
                 } else {
                     alcOrigen.saldoUSD = 0;
                     alcPrestamista.saldoUSD -= faltante;
-
                     const equivalenteBs = faltante * tasa;
                     alcOrigen.saldoBs -= equivalenteBs;
                     alcPrestamista.saldoBs += equivalenteBs;
 
-                    alert(`¡Éxito! Se movieron $${fmt(faltante)} USD a su equivalente de ${fmt(equivalenteBs)} Bs. para auxiliar en "${alcOrigen.nombre}".`);
-
                     cuenta.movimientos.unshift({
                         fecha: fecha,
-                        fuente: `${desc} [Compensación Tasa ${tipoTasa} x ${fmt(tasa)}: El prestamista tomó $${fmt(faltante)} a cambio de ${fmt(equivalenteBs)} Bs]`,
-                        tipo: "Gasto",
-                        txtBs: `⇄ Bs En Cuentas`,
-                        txtUSD: `-$${fmt(montoInput)}`,
-                        operacion: "compensado",
-                        monedaGasto: "USD",
-                        montoUSDOrigen: -saldoDisponible,
-                        montoUSDPrestamista: -faltante,
-                        montoBsCompensacion: equivalenteBs,
-                        alcanciaKey: alcanciaId,
-                        prestamistaKey: prestamistaId,
-                        destino: `${alcOrigen.nombre.toUpperCase()}`
+                        fuente: `${desc} [Compensado con ${alcPrestamista.nombre}]`,
+                        tipo: "Gasto", txtBs: `⇄ Bs En Cuentas`, txtUSD: `-$${fmt(montoInput)}`,
+                        operacion: "compensado", monedaGasto: "USD",
+                        montoUSDOrigen: -saldoDisponible, montoUSDPrestamista: -faltante, montoBaseCompensacion: equivalenteBs,
+                        alcanciaKey: alcanciaId, prestamistaKey: prestamistaId, destino: `${alcOrigen.nombre.toUpperCase()}`
                     });
                 }
             }
 
             document.getElementById('gastoDesc').value = '';
             document.getElementById('gastoMonto').value = '';
-            document.getElementById('panel-compensacion').classList.add('hidden');
-            await subirDatosCloud();
+            guardarDatos();
             actualizarInterfaz();
         }
 
-        async function eliminarMovimiento(index) {
-            const mov = cuenta.movimientos[index];
-            if (!confirm(`¿Deshacer el movimiento "${mov.fuente}"?`)) return;
-
-            if (mov.tipo === "Ingreso") {
-                cuenta.alcancias.forEach(alc => {
-                    alc.saldoBs -= mov.montoBs * (alc.porcentaje / 100);
-                });
-            } else if (mov.tipo === "Cambio $") {
-                cuenta.alcancias.forEach(alc => {
-                    alc.saldoBs -= mov.montoBs * (alc.porcentaje / 100);
-                    alc.saldoUSD -= mov.montoUSD * (alc.porcentaje / 100);
-                });
-            } else if (mov.tipo === "Gasto") {
-                if (mov.operacion === "directo") {
-                    const idx = cuenta.alcancias.findIndex(a => a.id === mov.alcanciaKey);
-                    if(idx !== -1) {
-                        if(mov.monedaGasto === "Bs") cuenta.alcancias[idx].saldoBs -= mov.montoBs;
-                        else cuenta.alcancias[idx].saldoUSD -= mov.montoUSD;
-                    }
-                } 
-                else if (mov.operacion === "compensado") {
-                    const idxOrigen = cuenta.alcancias.findIndex(a => a.id === mov.alcanciaKey);
-                    const idxPrestamista = cuenta.alcancias.findIndex(a => a.id === mov.prestamistaKey);
-
-                    if (mov.monedaGasto === "Bs") {
-                        if(idxOrigen !== -1) {
-                            cuenta.alcancias[idxOrigen].saldoBs -= mov.montoBsOrigen; 
-                            cuenta.alcancias[idxOrigen].saldoUSD += mov.montoUSDCompensacion; 
-                        }
-                        if(idxPrestamista !== -1) {
-                            cuenta.alcancias[idxPrestamista].saldoBs -= mov.montoBsPrestamista; 
-                            cuenta.alcancias[idxPrestamista].saldoUSD -= mov.montoUSDCompensacion; 
-                        }
-                    } else {
-                        if(idxOrigen !== -1) {
-                            cuenta.alcancias[idxOrigen].saldoUSD -= mov.montoUSDOrigen;
-                            cuenta.alcancias[idxOrigen].saldoBs += mov.montoBsCompensacion;
-                        }
-                        if(idxPrestamista !== -1) {
-                            cuenta.alcancias[idxPrestamista].saldoUSD -= mov.montoUSDPrestamista;
-                            cuenta.alcancias[idxPrestamista].saldoBs -= mov.montoBsCompensacion;
-                        }
-                    }
-                }
-            }
-
+        function eliminarMovimiento(index) {
             cuenta.movimientos.splice(index, 1);
-            await subirDatosCloud();
+            guardarDatos();
             actualizarInterfaz();
         }
 
@@ -744,9 +604,10 @@
             const selectGastos = document.getElementById('gastoAlcancia');
             const contenedorSaldosInciales = document.getElementById('contenedor-saldos-iniciales');
             
+            if(!contenedor) return;
             contenedor.innerHTML = '';
-            selectGastos.innerHTML = '';
-            contenedorSaldosInciales.innerHTML = '';
+            if(selectGastos) selectGastos.innerHTML = '';
+            if(contenedorSaldosInciales) contenedorSaldosInciales.innerHTML = '';
 
             let totalBs = 0;
             let totalUSD = 0;
@@ -756,79 +617,74 @@
                 totalUSD += alc.saldoUSD;
 
                 contenedor.innerHTML += `
-                    <div class="${alc.color} text-white p-4 rounded-xl shadow-sm transition-all duration-200">
+                    <div class="${alc.color} text-white p-4 rounded-xl shadow-sm">
                         <span class="text-xs opacity-90 block font-bold">${alc.icono} ${alc.nombre} (${alc.porcentaje}%)</span>
                         <div class="mt-2 border-t border-white/20 pt-1">
-                            <span class="text-[9px] uppercase opacity-75 block">Disponibles Bs:</span>
+                            <span class="text-[9px] uppercase opacity-75 block">Bs:</span>
                             <span class="text-sm font-bold block">${fmt(alc.saldoBs)} Bs</span>
                         </div>
                         <div class="mt-1">
-                            <span class="text-[9px] uppercase opacity-75 block">Disponibles USD:</span>
+                            <span class="text-[9px] uppercase opacity-75 block">USD:</span>
                             <span class="text-lg font-black block">$${fmt(alc.saldoUSD)}</span>
                         </div>
                     </div>
                 `;
 
-                selectGastos.innerHTML += `<option value="${alc.id}">${alc.icono} ${alc.nombre}</option>`;
+                if(selectGastos) selectGastos.innerHTML += `<option value="${alc.id}">${alc.icono} ${alc.nombre}</option>`;
 
-                contenedorSaldosInciales.innerHTML += `
-                    <div class="bg-white p-2 rounded-lg border border-gray-200 text-xs shadow-sm">
-                        <span class="font-bold block text-gray-700">${alc.icono} ${alc.nombre}</span>
-                        <input type="number" id="init-bs-${alc.id}" placeholder="Bs. (${fmt(alc.saldoBs).split(',')[0]})" class="w-full p-1.5 border rounded text-[11px] bg-gray-50 mt-1 focus:bg-white">
-                        <input type="number" id="init-usd-${alc.id}" placeholder="USD $(${fmt(alc.saldoUSD).split(',')[0]})" class="w-full p-1.5 border rounded text-[11px] bg-gray-50 mt-1 focus:bg-white">
-                    </div>
-                `;
+                if(contenedorSaldosInciales) {
+                    contenedorSaldosInciales.innerHTML += `
+                        <div class="bg-white p-2 rounded-lg border border-gray-200 text-xs shadow-sm">
+                            <span class="font-bold block text-gray-700">${alc.icono} ${alc.nombre}</span>
+                            <input type="number" id="init-bs-${alc.id}" placeholder="Bs." class="w-full p-1.5 border rounded text-[11px] bg-gray-50 mt-1">
+                            <input type="number" id="init-usd-${alc.id}" placeholder="USD $" class="w-full p-1.5 border rounded text-[11px] bg-gray-50 mt-1">
+                        </div>
+                    `;
+                }
             });
 
             document.getElementById('total-balance-bs').innerText = `${fmt(totalBs)} Bs`;
             document.getElementById('total-balance-usd').innerText = `$${fmt(totalUSD)}`;
 
             const listaAjuste = document.getElementById('lista-ajuste-alcancias');
-            listaAjuste.innerHTML = '';
-            cuenta.alcancias.forEach((alc, index) => {
-                listaAjuste.innerHTML += `
-                    <div class="flex items-center gap-2 bg-gray-50 p-2 rounded-lg border border-gray-200">
-                        <input type="text" value="${alc.nombre}" onchange="modificarAlcancia(${index}, 'nombre', this.value)" class="flex-1 bg-white border border-gray-300 rounded px-2 py-1 text-sm font-semibold">
-                        <div class="flex items-center gap-1 w-24">
-                            <input type="number" value="${alc.porcentaje}" onchange="modificarAlcancia(${index}, 'porcentaje', this.value)" class="w-full bg-white border border-gray-300 rounded px-2 py-1 text-sm font-mono text-right font-bold">
-                            <span class="text-xs font-bold text-gray-400">%</span>
+            if(listaAjuste) {
+                listaAjuste.innerHTML = '';
+                cuenta.alcancias.forEach((alc, index) => {
+                    listaAjuste.innerHTML += `
+                        <div class="flex items-center gap-2 bg-gray-50 p-2 rounded-lg border border-gray-200">
+                            <input type="text" value="${alc.nombre}" onchange="modificarAlcancia(${index}, 'nombre', this.value)" class="flex-1 bg-white border border-gray-300 rounded px-2 py-1 text-sm font-semibold">
+                            <input type="number" value="${alc.porcentaje}" onchange="modificarAlcancia(${index}, 'porcentaje', this.value)" class="w-20 bg-white border border-gray-300 rounded px-2 py-1 text-sm text-right font-bold">
+                            <button onclick="eliminarAlcancia(${index})" class="text-red-500">🗑️</button>
                         </div>
-                        <button onclick="eliminarAlcancia(${index})" class="text-red-500 p-1">🗑️</button>
-                    </div>
-                `;
-            });
+                    `;
+                });
+            }
 
             verificarPorcentajes();
             evaluarNecesidadCompensacion();
 
             const tabla = document.getElementById('historialCuerpo');
-            tabla.innerHTML = '';
-            cuenta.movimientos.forEach((mov, index) => {
-                let badgeClase = "bg-green-100 text-green-800";
-                if (mov.tipo === "Gasto") badgeClase = mov.operacion === "compensado" ? "bg-amber-100 text-amber-900 border border-amber-300" : "bg-red-100 text-red-800";
-                if (mov.tipo === "Cambio $") badgeClase = "bg-emerald-100 text-emerald-800";
-                if (mov.tipo === "Ajuste") badgeClase = "bg-gray-100 text-gray-800";
-
-                tabla.innerHTML += `
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="p-3 text-xs text-gray-500 whitespace-nowrap font-medium">${mov.fecha || "-"}</td>
-                        <td class="p-3 font-medium text-gray-800 text-xs md:text-sm">${mov.fuente}</td>
-                        <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[11px] font-semibold ${badgeClase}">${mov.tipo}</span></td>
-                        <td class="p-3 font-mono text-amber-700 font-semibold">${mov.txtBs}</td>
-                        <td class="p-3 font-mono text-indigo-700 font-bold">${mov.txtUSD}</td>
-                        <td class="p-3 text-xs font-semibold text-indigo-600 uppercase">${mov.destino}</td>
-                        <td class="p-3 text-center">
-                            <button onclick="eliminarMovimiento(${index})" class="text-red-500 hover:text-red-700 font-bold px-2 py-1">🗑️</button>
-                        </td>
-                    </tr>
-                `;
-            });
+            if(tabla) {
+                tabla.innerHTML = '';
+                cuenta.movimientos.forEach((mov, index) => {
+                    tabla.innerHTML += `
+                        <tr class="hover:bg-gray-50 text-xs">
+                            <td class="p-3 text-gray-500">${mov.fecha || "-"}</td>
+                            <td class="p-3 font-medium text-gray-800">${mov.fuente}</td>
+                            <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] bg-gray-100">${mov.tipo}</span></td>
+                            <td class="p-3 text-amber-700 font-mono">${mov.txtBs}</td>
+                            <td class="p-3 text-indigo-700 font-mono font-bold">${mov.txtUSD}</td>
+                            <td class="p-3 uppercase font-semibold text-indigo-600">${mov.destino}</td>
+                            <td class="p-3 text-center"><button onclick="eliminarMovimiento(${index})" class="text-red-500">🗑️</button></td>
+                        </tr>
+                    `;
+                });
+            }
         }
 
-        async function limpiarTodo() {
-            if(confirm("🚨 ¿Seguro que quieres reiniciar el sistema a cero tanto local como en la Nube?")) {
-                cuenta = { alcancias: [], movimientos: [] };
-                await subirDatosCloud();
+        function limpiarTodo() {
+            if(confirm("¿Reiniciar todo?")) {
+                localStorage.removeItem('sistemaAlcanciasCompensadasLocal');
                 location.reload();
             }
         }
